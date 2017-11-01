@@ -1,0 +1,158 @@
+package com.example.shuaibfawole.animation2;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+//The class that contain main function to be called when our app is being launched
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,Animation.AnimationListener{
+// Declaring animation object for diferent animations we want to create
+    Animation animFadein;
+    Animation animFadeout;
+    SeekBar seekBar;
+    ImageView imageView;
+    Button btnFadin;
+    Button btnFadeout;
+    TextView textname;
+    int mseekSpeed;
+
+    //This method get called when we launch our app
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        loadUI();
+        loadAnimation();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    //Creating a function that will load the animation from the xml file to java file
+    private void loadAnimation(){
+        animFadein = AnimationUtils.loadAnimation(this,R.anim.fade_in);
+        animFadein.setAnimationListener((Animation.AnimationListener) this);
+        animFadeout = AnimationUtils.loadAnimation(this,R.anim.fade_out);
+        animFadeout.setAnimationListener((Animation.AnimationListener) this);
+    }
+    //Creating a method the loads UI elements from xml file
+    private void loadUI(){
+        imageView = (ImageView)findViewById(R.id.imageview);
+         btnFadin = (Button)findViewById(R.id.fadein);
+         btnFadeout = (Button)findViewById(R.id.fadeout);
+         seekBar = (SeekBar)findViewById(R.id.seekbar);
+         textname = (TextView)findViewById(R.id.textname);
+        //Adding  listerner to the fadein button on the UI
+        btnFadin.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+        // Adding the click listener to the fade out button
+        btnFadeout.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                }
+        );
+
+        //Adding listener to the seekbar
+        seekBar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                       mseekSpeed = progress;
+                        textname.setText(" " + mseekSpeed + "of" + seekBar.getMax());
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                }
+        );
+
+    }
+//Implementing the necessary method for the interfaces implemented by the MainActivity
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        //Adding swicth to test for the animation selected
+        switch (v.getId()){
+            case R.id.fadein :
+                animFadein.setDuration(mseekSpeed);
+                animFadein.setAnimationListener(this);
+                imageView.startAnimation(animFadein);
+                break;
+            case R.id.fadeout :
+                animFadeout.setDuration(mseekSpeed);
+                animFadeout.setAnimationListener(this);
+                imageView.startAnimation(animFadeout);
+                break;
+        }
+    }
+
+}
